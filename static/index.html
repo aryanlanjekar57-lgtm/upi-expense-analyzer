@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receipt &amp; UPI Expense Analyzer</title>
+  <meta name="description" content="Upload UPI screenshots or bill photos in any Indian language, sort the spending into categories and see how the month is going against your budget.">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the main content</a>
+
+  <header class="top">
+    <h1>Receipt &amp; UPI Expense Analyzer</h1>
+    <p>Drop in UPI screenshots or bill photos, in English, Hindi, Marathi or another Indian language. See where the month's money went and whether you are on budget.</p>
+  </header>
+
+  <main id="main" class="layout">
+    <div class="col">
+      <section class="panel" aria-labelledby="add-h">
+        <h2 id="add-h">Add expenses</h2>
+
+        <div id="drop" class="drop">
+          <input id="file" class="sr-only" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+          <label for="file" class="drop-label">
+            <strong>Choose receipt images</strong>
+            <span>or drop them here. JPEG, PNG or WebP, up to <span id="limit-files">5</span> at a time.</span>
+          </label>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <ul id="problems" class="problems" role="alert"></ul>
+        <p class="note">Images are sent to Google's Gemini API to be read. This app does not save them.</p>
+
+        <details class="manual">
+          <summary>Add an expense by hand</summary>
+          <form id="manual-form" class="manual-grid" novalidate>
+            <label class="cell"><span class="cell-label">Vendor</span>
+              <input id="m-vendor" type="text" maxlength="80" required autocomplete="off"></label>
+            <label class="cell"><span class="cell-label">Amount (₹)</span>
+              <input id="m-amount" type="number" min="0.01" max="10000000" step="0.01" inputmode="decimal" required></label>
+            <label class="cell"><span class="cell-label">Date</span>
+              <input id="m-date" type="date"></label>
+            <label class="cell"><span class="cell-label">Category</span>
+              <select id="m-category"><option value="">Pick for me</option></select></label>
+            <button class="btn" type="submit">Add expense</button>
+          </form>
+        </details>
+
+        <p><button id="sample" class="btn-link" type="button">Try it with sample data</button></p>
+      </section>
+
+      <section class="panel" aria-labelledby="list-h">
+        <div class="panel-head">
+          <h2 id="list-h">Check the details</h2>
+          <div class="actions">
+            <button id="export" class="btn secondary" type="button">Download CSV</button>
+            <button id="clear" class="btn secondary" type="button">Clear all</button>
+          </div>
+        </div>
+        <p id="empty" class="empty">Nothing here yet. Add a receipt image or an expense by hand and it will show up here for you to check and fix.</p>
+        <ul id="rows" class="rows"></ul>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel" aria-labelledby="budget-h">
+        <h2 id="budget-h">Monthly budget</h2>
+        <label class="cell month-pick"><span class="cell-label">Month</span>
+          <select id="month"></select></label>
+        <fieldset class="budgets">
+          <legend>Budget for each category (₹, leave blank for none)</legend>
+          <div id="budget-grid" class="budget-grid"></div>
+        </fieldset>
+      </section>
+
+      <section class="panel" aria-labelledby="result-h" aria-live="polite">
+        <h2 id="result-h">How the month is going</h2>
+        <p id="result-empty" class="empty">Add some expenses and your spending will be summed up here.</p>
+        <div id="result" hidden>
+          <dl class="stats" id="stats"></dl>
+          <ul id="bars" class="bars"></ul>
+          <div id="alerts-wrap" hidden>
+            <h3>Heads up</h3>
+            <ul id="alerts" class="alerts"></ul>
+          </div>
+          <div id="tips-wrap" hidden>
+            <h3>What you could do</h3>
+            <ul id="tips" class="tips"></ul>
+          </div>
+          <div id="vendors-wrap" hidden>
+            <h3>Biggest vendors</h3>
+            <ol id="vendors" class="vendors"></ol>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p>Amounts are in Indian rupees. Check what was read from each image before you rely on the totals.</p>
+  </footer>
+</body>
+</html>
